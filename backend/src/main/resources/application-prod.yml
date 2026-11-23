@@ -1,0 +1,22 @@
+# 生产环境 profile：java -jar -Dspring.profiles.active=prod
+spring:
+  jpa:
+    show-sql: false
+  sql:
+    init:
+      mode: never   # 生产由 Flyway/Liquibase 或手工迁移管理，不自动执行 schema/data
+  ai:
+    openai:
+      api-key: ${AI_API_KEY}
+
+app:
+  ai:
+    mock-enabled: false
+
+logging:
+  level:
+    root: WARN
+    com.supportpilot: INFO
+    # 生产关闭 SQL 与绑定参数日志，避免泄露与刷屏（本地 default profile 会打印）
+    org.hibernate.SQL: WARN
+    org.hibernate.orm.jdbc.bind: WARN

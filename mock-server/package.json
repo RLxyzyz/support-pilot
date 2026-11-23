@@ -1,0 +1,13 @@
+{
+  "name": "support-pilot-mock-server",
+  "version": "1.0.0",
+  "description": "SupportPilot 本地开发 mock 后端（无 Java 时用于前端联调演示，接口契约与 Spring Boot 后端一致）",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.19.2"
+  }
+}

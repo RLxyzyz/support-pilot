@@ -1,0 +1,307 @@
+﻿
+> support-pilot-frontend@1.0.0 dev
+> vite
+
+
+  [32m[1mVITE[22m v4.5.14[39m  [2mready in [0m[1m2271[22m[2m[0m ms[22m
+
+  [32m➜[39m  [1mLocal[22m:   [36mhttp://localhost:[1m5173[22m/[39m
+  [32m➜[39m  [1mNetwork[22m: [36mhttp://192.168.1.3:[1m5173[22m/[39m
+[2m15:26:06[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Toast.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/Login.tsx, /src/pages/Register.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx[22m
+[2m15:26:08[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/Toast.tsx[22m Could not Fast Refresh ("useToast" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m15:26:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx[22m
+[2m15:26:20[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Toast.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/Login.tsx, /src/pages/Register.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx[22m
+[2m15:26:22[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/Toast.tsx[22m Could not Fast Refresh ("useToast" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m15:26:22[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx[22m
+[2m15:26:34[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m15:26:35[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m15:26:37[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m15:26:38[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m15:26:39[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m15:26:40[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m15:26:46[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m15:27:18[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketDetail.tsx[22m
+[2m15:27:19[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketDetail.tsx[22m
+[2m15:27:20[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketDetail.tsx[22m
+[2m15:27:22[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketDetail.tsx[22m
+[2m15:27:29[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketDetail.tsx[22m
+[2m15:27:33[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketDetail.tsx[22m
+[2m15:27:39[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketDetail.tsx[22m
+[2m15:27:52[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CustomerDetail.tsx[22m
+[2m15:27:54[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CustomerDetail.tsx[22m
+[2m15:27:57[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/CustomerDetail.tsx[22m
+[2m15:28:11[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Board.tsx[22m
+[2m15:28:12[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Board.tsx[22m
+[2m15:28:13[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Board.tsx[22m
+[2m15:28:15[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Board.tsx[22m
+[2m15:28:18[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/Board.tsx[22m
+[2m15:28:54[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m15:28:55[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/layouts/Shell.tsx[22m
+[2m15:28:55[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/layouts/Shell.tsx[22m
+[2m15:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx[22m
+[2m15:28:56[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/layouts/Shell.tsx[22m
+[2m15:29:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/layouts/Shell.tsx[22m
+[2m15:29:02[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/layouts/Shell.tsx[22m
+[2m15:29:03[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/layouts/Shell.tsx[22m
+npm : [2m16:00:40[22m [31m[1m[vite][22m[39m [31mhttp proxy error at /api/notifications/unread-count:[39m
+所在位置 行:15 字符: 2308
++ ... env:PAGER = 'more'; $env:TERM = 'dumb'; npm run dev *> dev-server.log
++                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([2m16:00:40[2...ead-count:[39m:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1278:16)
+[2m13:45:50[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m13:45:51[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m13:45:54[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m13:45:54[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m13:45:59[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/TicketList.tsx[22m
+[2m14:06:07[22m [31m[1m[vite][22m[39m [31mhttp proxy error at /api/notifications/unread-count:[39m
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1278:16)
+[2m14:06:07[22m [31m[1m[vite][22m[39m [31mhttp proxy error at /api/storms/active:[39m
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1278:16)
+[2m14:10:40[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Toast.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/Login.tsx, /src/pages/Register.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx, /src/pages/SmartSettings.tsx[22m
+[2m14:10:43[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/Toast.tsx[22m Could not Fast Refresh ("useToast" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m14:10:43[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx, /src/pages/SmartSettings.tsx[22m
+[2m14:10:43[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/Toast.tsx[22m Could not Fast Refresh ("useToast" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m14:10:43[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx, /src/pages/SmartSettings.tsx[22m
+[2m14:10:47[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/components/Toast.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/Login.tsx, /src/pages/Register.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx, /src/pages/SmartSettings.tsx[22m
+[2m14:10:49[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/Toast.tsx[22m Could not Fast Refresh ("useToast" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m14:10:49[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx, /src/pages/SmartSettings.tsx[22m
+[2m14:10:49[22m [36m[1m[vite][22m[39m [33mhmr invalidate [39m[2m/src/components/Toast.tsx[22m Could not Fast Refresh ("useToast" export is incompatible). Learn more at https://github.com/vitejs/vite-plugin-react/tree/main/packages/plugin-react#consistent-components-exports
+[2m14:10:49[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/App.tsx, /src/pages/Profile.tsx, /src/layouts/Shell.tsx, /src/pages/CustomerList.tsx, /src/pages/Notifications.tsx, /src/pages/OperationLogs.tsx, /src/pages/NotifyRules.tsx, /src/pages/KnowledgeBase.tsx, /src/pages/CustomerDetail.tsx, /src/pages/TicketList.tsx, /src/pages/SlaSettings.tsx, /src/pages/UserManagement.tsx, /src/pages/Board.tsx, /src/pages/TicketDetail.tsx, /src/components/AIPanel.tsx, /src/pages/SmartSettings.tsx[22m
+[2m14:10:54[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/KnowledgeBase.tsx[22m
+[2m14:10:54[22m [31m[1m[vite][22m[39m [31mInternal server error: D:\系统目录\文档\Trae-CN\default\support-pilot\fronte
+nd\src\pages\KnowledgeBase.tsx: Identifier 'productLines' has already been declared. (137:8)
+
+[0m [90m 135 |[31m
+ [90m 136 |[31m   [90m// 产品线下拉选项：从现有文档去重；筛选激活时保留当前选项，避免下拉丢失选中项[31m
+[31m[1m>[22m[31m[90m 137 |[31m   [36mconst[31m productLines [33m=[31m [33mArray[31m[33m.[31m[36mfrom[31
+m([36mnew[31m [33mSet[31m(docs[33m.[31mmap((d) [33m=>[31m d[33m.[31mproductLine)[33m.[31mfilter([33mBoolea
+n[31m) [36mas[31m string[]))[33m;[31m
+ [90m     |[31m         [31m[1m^[22m[31m
+ [90m 138 |[31m   [36mif[31m (productLineFilter [33m!==[31m [32m'全部'[31m [33m&&[31m [33m![31mproductLines[
+33m.[31mincludes(productLineFilter)) {
+ [90m 139 |[31m     productLines[33m.[31mpush(productLineFilter)[33m;[31m
+ [90m 140 |[31m   }[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/系统目录/文档/Trae-CN/default/support-pilot/frontend/src/pages/KnowledgeBase.tsx[39m:137:8
+[33m  135|  
+  136|    // 产品线下拉选项：从现有文档去重；筛选激活时保留当前选项，避免下拉丢失选中项
+  137|    const productLines = Array.from(new Set(docs.map((d) => d.productLine).filter(Boolean) as string[]));
+     |          ^
+  138|    if (productLineFilter !== '全部' && !productLines.includes(productLineFilter)) {
+  139|      productLines.push(productLineFilter);[39m
+      at constructor (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\index.js:369:19)
+      at TypeScriptParserMixin.raise (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\
+index.js:6632:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modul
+es\@babel\parser\lib\index.js:1626:19)
+      at TypeScriptScopeHandler.declareName (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pars
+er\lib\index.js:1592:12)
+      at TypeScriptScopeHandler.declareName (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pars
+er\lib\index.js:4898:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_module
+s\@babel\parser\lib\index.js:7676:16)
+      at TypeScriptParserMixin.checkIdentifier (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\p
+arser\lib\index.js:7659:12)
+      at TypeScriptParserMixin.checkLVal (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\
+lib\index.js:7606:12)
+      at TypeScriptParserMixin.parseVarId (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser
+\lib\index.js:10452:10)
+      at TypeScriptParserMixin.parseVarId (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser
+\lib\index.js:13719:11)
+      at TypeScriptParserMixin.parseVar (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\l
+ib\index.js:10423:12)
+      at TypeScriptParserMixin.parseVarStatement (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel
+\parser\lib\index.js:10270:10)
+      at TypeScriptParserMixin.parseVarStatement (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel
+\parser\lib\index.js:13347:31)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:9879:23)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:13447:18)
+      at TypeScriptParserMixin.parseStatementLike (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babe
+l\parser\lib\index.js:9794:17)
+      at TypeScriptParserMixin.parseStatementListItem (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@
+babel\parser\lib\index.js:9774:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modu
+les\@babel\parser\lib\index.js:10356:61)
+      at TypeScriptParserMixin.parseBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pa
+rser\lib\index.js:10349:10)
+      at TypeScriptParserMixin.parseBlock (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser
+\lib\index.js:10337:10)
+      at TypeScriptParserMixin.parseFunctionBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel
+\parser\lib\index.js:9105:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modul
+es\@babel\parser\lib\index.js:9091:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modul
+es\@babel\parser\lib\index.js:13103:18)
+      at D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\index.js:10486:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\no
+de_modules\@babel\parser\lib\index.js:9413:14)
+      at TypeScriptParserMixin.parseFunction (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\par
+ser\lib\index.js:10485:10)
+      at TypeScriptParserMixin.parseExportDefaultExpression (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_mod
+ules\@babel\parser\lib\index.js:10946:19)
+      at TypeScriptParserMixin.parseExportDefaultExpression (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_mod
+ules\@babel\parser\lib\index.js:13341:18)
+      at TypeScriptParserMixin.parseExport (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parse
+r\lib\index.js:10867:25)
+      at TypeScriptParserMixin.parseExport (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parse
+r\lib\index.js:13324:20)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:9906:27)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:13447:18)
+      at TypeScriptParserMixin.parseStatementLike (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babe
+l\parser\lib\index.js:9794:17)
+      at TypeScriptParserMixin.parseModuleItem (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\p
+arser\lib\index.js:9771:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modu
+les\@babel\parser\lib\index.js:10356:36)
+      at TypeScriptParserMixin.parseBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pa
+rser\lib\index.js:10349:10)
+      at TypeScriptParserMixin.parseProgram (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pars
+er\lib\index.js:9633:10)
+      at TypeScriptParserMixin.parseTopLevel (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\par
+ser\lib\index.js:9623:25)
+      at TypeScriptParserMixin.parse (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\
+index.js:14896:25)
+      at TypeScriptParserMixin.parse (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\
+index.js:14220:18)
+      at parse (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\index.js:14930:38)
+      at parser (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\parser\index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\transformation\n
+ormalize-file.js:51:37)
+      at normalizeFile.next (<anonymous>)
+      at run (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\transformation\index.js:22
+:50)
+      at run.next (<anonymous>)
+      at transform (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\gensync\index.js:261:32)
+[2m14:10:54[22m [31m[1m[vite][22m[39m [31mInternal server error: D:\系统目录\文档\Trae-CN\default\support-pilot\fronte
+nd\src\pages\KnowledgeBase.tsx: Identifier 'productLines' has already been declared. (137:8)
+
+[0m [90m 135 |[31m
+ [90m 136 |[31m   [90m// 产品线下拉选项：从现有文档去重；筛选激活时保留当前选项，避免下拉丢失选中项[31m
+[31m[1m>[22m[31m[90m 137 |[31m   [36mconst[31m productLines [33m=[31m [33mArray[31m[33m.[31m[36mfrom[31
+m([36mnew[31m [33mSet[31m(docs[33m.[31mmap((d) [33m=>[31m d[33m.[31mproductLine)[33m.[31mfilter([33mBoolea
+n[31m) [36mas[31m string[]))[33m;[31m
+ [90m     |[31m         [31m[1m^[22m[31m
+ [90m 138 |[31m   [36mif[31m (productLineFilter [33m!==[31m [32m'全部'[31m [33m&&[31m [33m![31mproductLines[
+33m.[31mincludes(productLineFilter)) {
+ [90m 139 |[31m     productLines[33m.[31mpush(productLineFilter)[33m;[31m
+ [90m 140 |[31m   }[0m[39m
+  Plugin: [35mvite:react-babel[39m
+  File: [36mD:/系统目录/文档/Trae-CN/default/support-pilot/frontend/src/pages/KnowledgeBase.tsx[39m:137:8
+[33m  135|  
+  136|    // 产品线下拉选项：从现有文档去重；筛选激活时保留当前选项，避免下拉丢失选中项
+  137|    const productLines = Array.from(new Set(docs.map((d) => d.productLine).filter(Boolean) as string[]));
+     |          ^
+  138|    if (productLineFilter !== '全部' && !productLines.includes(productLineFilter)) {
+  139|      productLines.push(productLineFilter);[39m
+      at constructor (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\index.js:369:19)
+      at TypeScriptParserMixin.raise (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\
+index.js:6632:19)
+      at TypeScriptScopeHandler.checkRedeclarationInScope (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modul
+es\@babel\parser\lib\index.js:1626:19)
+      at TypeScriptScopeHandler.declareName (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pars
+er\lib\index.js:1592:12)
+      at TypeScriptScopeHandler.declareName (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pars
+er\lib\index.js:4898:11)
+      at TypeScriptParserMixin.declareNameFromIdentifier (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_module
+s\@babel\parser\lib\index.js:7676:16)
+      at TypeScriptParserMixin.checkIdentifier (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\p
+arser\lib\index.js:7659:12)
+      at TypeScriptParserMixin.checkLVal (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\
+lib\index.js:7606:12)
+      at TypeScriptParserMixin.parseVarId (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser
+\lib\index.js:10452:10)
+      at TypeScriptParserMixin.parseVarId (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser
+\lib\index.js:13719:11)
+      at TypeScriptParserMixin.parseVar (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\l
+ib\index.js:10423:12)
+      at TypeScriptParserMixin.parseVarStatement (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel
+\parser\lib\index.js:10270:10)
+      at TypeScriptParserMixin.parseVarStatement (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel
+\parser\lib\index.js:13347:31)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:9879:23)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:13447:18)
+      at TypeScriptParserMixin.parseStatementLike (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babe
+l\parser\lib\index.js:9794:17)
+      at TypeScriptParserMixin.parseStatementListItem (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@
+babel\parser\lib\index.js:9774:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modu
+les\@babel\parser\lib\index.js:10356:61)
+      at TypeScriptParserMixin.parseBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pa
+rser\lib\index.js:10349:10)
+      at TypeScriptParserMixin.parseBlock (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser
+\lib\index.js:10337:10)
+      at TypeScriptParserMixin.parseFunctionBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel
+\parser\lib\index.js:9105:24)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modul
+es\@babel\parser\lib\index.js:9091:10)
+      at TypeScriptParserMixin.parseFunctionBodyAndFinish (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modul
+es\@babel\parser\lib\index.js:13103:18)
+      at D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\index.js:10486:12
+      at TypeScriptParserMixin.withSmartMixTopicForbiddingContext (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\no
+de_modules\@babel\parser\lib\index.js:9413:14)
+      at TypeScriptParserMixin.parseFunction (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\par
+ser\lib\index.js:10485:10)
+      at TypeScriptParserMixin.parseExportDefaultExpression (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_mod
+ules\@babel\parser\lib\index.js:10946:19)
+      at TypeScriptParserMixin.parseExportDefaultExpression (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_mod
+ules\@babel\parser\lib\index.js:13341:18)
+      at TypeScriptParserMixin.parseExport (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parse
+r\lib\index.js:10867:25)
+      at TypeScriptParserMixin.parseExport (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parse
+r\lib\index.js:13324:20)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:9906:27)
+      at TypeScriptParserMixin.parseStatementContent (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@b
+abel\parser\lib\index.js:13447:18)
+      at TypeScriptParserMixin.parseStatementLike (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babe
+l\parser\lib\index.js:9794:17)
+      at TypeScriptParserMixin.parseModuleItem (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\p
+arser\lib\index.js:9771:17)
+      at TypeScriptParserMixin.parseBlockOrModuleBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modu
+les\@babel\parser\lib\index.js:10356:36)
+      at TypeScriptParserMixin.parseBlockBody (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pa
+rser\lib\index.js:10349:10)
+      at TypeScriptParserMixin.parseProgram (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\pars
+er\lib\index.js:9633:10)
+      at TypeScriptParserMixin.parseTopLevel (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\par
+ser\lib\index.js:9623:25)
+      at TypeScriptParserMixin.parse (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\
+index.js:14896:25)
+      at TypeScriptParserMixin.parse (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\
+index.js:14220:18)
+      at parse (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\parser\lib\index.js:14930:38)
+      at parser (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\parser\index.js:41:34)
+      at parser.next (<anonymous>)
+      at normalizeFile (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\transformation\n
+ormalize-file.js:51:37)
+      at normalizeFile.next (<anonymous>)
+      at run (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\transformation\index.js:22
+:50)
+      at run.next (<anonymous>)
+      at transform (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\@babel\core\lib\transform.js:22:33)
+      at transform.next (<anonymous>)
+      at step (D:\系统目录\文档\Trae-CN\default\support-pilot\frontend\node_modules\gensync\index.js:261:32)
+[2m14:11:01[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/KnowledgeBase.tsx[22m
+[2m14:11:07[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/KnowledgeBase.tsx[22m
+[2m14:11:08[22m [36m[1m[vite][22m[39m [32mhmr update [39m[2m/src/pages/KnowledgeBase.tsx[22m
+[2m14:20:12[22m [31m[1m[vite][22m[39m [31mhttp proxy error at /api/notifications/unread-count:[39m
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1278:16)
+[2m14:20:12[22m [31m[1m[vite][22m[39m [31mhttp proxy error at /api/storms/active:[39m
+Error: connect ECONNREFUSED 127.0.0.1:8080
+    at TCPConnectWrap.afterConnect [as oncomplete] (node:net:1278:16)

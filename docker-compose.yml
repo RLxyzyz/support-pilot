@@ -1,0 +1,122 @@
+# SupportPilot 生产部署：MySQL 8 + Spring Boot 后端 + Nginx 前端
+# 向量库使用远程 Milvus，不在本编排内。
+#
+# 用法：
+#   1) cp .env.example .env   # 填入真实密钥（.env 已被 gitignore）
+#   2) docker compose up -d --build
+#   3) 浏览器访问 http://<服务器IP>/   （默认管理员 admin / 123456，登录后立即改密码）
+#
+# 常用运维：
+#   docker compose logs -f backend      # 看后端日志
+#   docker compose restart backend      # 改完 .env 后重启
+#   docker compose down                 # 停止（数据卷保留）
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: supportpilot-mysql
+    restart: unless-stopped
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:?请在 .env 中配置 DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME:-supportpilot}
+      MYSQL_USER: ${DB_USER:-supportpilot}
+      MYSQL_PASSWORD: ${DB_PASSWORD:?请在 .env 中配置 DB_PASSWORD}
+      TZ: Asia/Shanghai
+    volumes:
+      - mysqldata:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p$$MYSQL_ROOT_PASSWORD --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 30s
+    # 默认不对外暴露 3306；本机需要用客户端连库时把下面两行注释打开
+    # ports:
+    #   - "3306:3306"
+
+  backend:
+    build: ./backend
+    container_name: supportpilot-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      TZ: Asia/Shanghai
+      SPRING_PROFILES_ACTIVE: prod
+      # 首次部署需要自动建表：脚本均为 CREATE TABLE IF NOT EXISTS / INSERT IGNORE，可重复执行
+      SPRING_SQL_INIT_MODE: always
+      SPRING_SQL_INIT_SCHEMA_LOCATIONS: classpath:db/schema-mysql.sql
+      # 演示种子数据（租户/产品/示例工单）。不需要时把 .env 里 SQL_INIT_DATA_LOCATIONS 置空字符串
+      SPRING_SQL_INIT_DATA_LOCATIONS: ${SQL_INIT_DATA_LOCATIONS:-classpath:db/data-mysql.sql}
+      SERVER_PORT: "8080"
+      # ---- 数据库 ----
+      DB_HOST: mysql
+      DB_PORT: "3306"
+      DB_NAME: ${DB_NAME:-supportpilot}
+      DB_USER: ${DB_USER:-supportpilot}
+      DB_PASSWORD: ${DB_PASSWORD:?请在 .env 中配置 DB_PASSWORD}
+      # ---- 鉴权 ----
+      JWT_SECRET: ${JWT_SECRET:?请在 .env 中配置 JWT_SECRET}
+      TOKEN_EXPIRE_MINUTES: ${TOKEN_EXPIRE_MINUTES:-30}
+      DEFAULT_TENANT_ID: ${DEFAULT_TENANT_ID:-1}
+      # 公网部署默认关闭自助注册，只保留登录与健康检查
+      SECURITY_PERMIT_ALL: ${SECURITY_PERMIT_ALL:-/api/auth/login,/actuator/**}
+      # ---- 大模型（对话 + 向量化）----
+      AI_API_KEY: ${AI_API_KEY:?请在 .env 中配置 AI_API_KEY}
+      AI_BASE_URL: ${AI_BASE_URL:-https://api.deepseek.com}
+      AI_MODEL: ${AI_MODEL:-deepseek-flash}
+      AI_EMBEDDING_API_KEY: ${AI_EMBEDDING_API_KEY:-}
+      AI_EMBEDDING_BASE_URL: ${AI_EMBEDDING_BASE_URL:-https://llm-we0hmfhb30y5op17.cn-beijing.maas.aliyuncs.com/compatible-mode/v1}
+      AI_EMBEDDING_MODEL: ${AI_EMBEDDING_MODEL:-text-embedding-v4}
+      AI_EMBEDDING_DIM: ${AI_EMBEDDING_DIM:-1024}
+      # ---- 远程 Milvus ----
+      MILVUS_HOST: ${MILVUS_HOST:-8.136.21.168}
+      MILVUS_PORT: ${MILVUS_PORT:-19530}
+      MILVUS_USERNAME: ${MILVUS_USERNAME:-root}
+      MILVUS_PASSWORD: ${MILVUS_PASSWORD:-milvus}
+      MILVUS_COLLECTION: ${MILVUS_COLLECTION:-supportpilot_kb}
+      MILVUS_INIT_SCHEMA: ${MILVUS_INIT_SCHEMA:-true}
+      # ---- 邮件（未配置 MAIL_HOST 时自动降级为仅站内信）----
+      MAIL_HOST: ${MAIL_HOST:-}
+      MAIL_PORT: ${MAIL_PORT:-465}
+      MAIL_USERNAME: ${MAIL_USERNAME:-}
+      MAIL_PASSWORD: ${MAIL_PASSWORD:-}
+      MAIL_SMTP_SSL: ${MAIL_SMTP_SSL:-true}
+      MAIL_SMTP_STARTTLS: ${MAIL_SMTP_STARTTLS:-false}
+      MAIL_FROM: ${MAIL_FROM:-}
+      MAIL_DOMAIN: ${MAIL_DOMAIN:-supportpilot.local}
+      # ---- 附件存储（挂载到宿主机 ./data/attachments）----
+      ATTACHMENT_DIR: /app/data/attachments
+      ATTACHMENT_QUOTA_BYTES: ${ATTACHMENT_QUOTA_BYTES:-5368709120}
+      # ---- GitHub Issue 同步 ----
+      GITHUB_SYNC_ENABLED: ${GITHUB_SYNC_ENABLED:-false}
+      GITHUB_OWNER: ${GITHUB_OWNER:-}
+      GITHUB_REPO: ${GITHUB_REPO:-}
+      GITHUB_TOKEN: ${GITHUB_TOKEN:-}
+      GITHUB_MAX_ISSUES: ${GITHUB_MAX_ISSUES:-20}
+      GITHUB_MAX_COMMENTS: ${GITHUB_MAX_COMMENTS:-20}
+      # ---- SLA ----
+      SLA_SCAN_CRON: ${SLA_SCAN_CRON:-0 */5 * * * ?}
+      SLA_AUTO_ESCALATE_ENABLED: ${SLA_AUTO_ESCALATE_ENABLED:-true}
+      SLA_AUTO_ESCALATE_DELAY_MINUTES: ${SLA_AUTO_ESCALATE_DELAY_MINUTES:-30}
+    volumes:
+      - ./data/attachments:/app/data/attachments
+    # 只在前端 Nginx 内部访问，不对外暴露 8080；本机调试时把下面两行注释打开
+    # ports:
+    #   - "8080:8080"
+
+  frontend:
+    build: ./frontend
+    container_name: supportpilot-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "80:80"
+
+volumes:
+  mysqldata:

@@ -1,0 +1,25 @@
+# ===== 含密钥的本地私密配置，禁止提交 =====
+**/application-secret.yml
+**/application-local.yml
+**/.env
+**/.env.*
+
+# ===== 构建产物 / 本地缓存 =====
+**/target/
+**/dist/
+**/node_modules/
+**/.m2-repo/
+**/.idea/
+**/*.iml
+
+# ===== IDE / 系统 =====
+.vscode/
+.trae/
+.trae-html-share-packages/
+.screenshots/
+.DS_Store
+Thumbs.db
+
+# ===== 运行时数据 =====
+**/data/
+**/*.log

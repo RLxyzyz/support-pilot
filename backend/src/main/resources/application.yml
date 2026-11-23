@@ -1,0 +1,187 @@
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
+
+spring:
+  # 本地私密配置（密钥等），存在则覆盖上方同名项，不存在不报错；已被 .gitignore 忽略
+  config:
+    import: optional:classpath:application-secret.yml
+  application:
+    name: support-pilot-backend
+  datasource:
+    url: "jdbc:mysql://${DB_HOST:localhost}:${DB_PORT:3306}/${DB_NAME:supportpilot}?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true"
+    username: ${DB_USER:root}
+    password: ${DB_PASSWORD:1234}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 10
+  jpa:
+    hibernate:
+      ddl-auto: none
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    defer-datasource-initialization: true
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:db/schema-mysql.sql
+      data-locations: classpath:db/data-mysql.sql
+      continue-on-error: true
+  # 真实模型 / 向量库；mock 开关已强制关闭（见 app.ai.mock-enabled），任何环境都走真实模型
+  ai:
+    openai:
+      api-key: ${AI_API_KEY:}
+      base-url: ${AI_BASE_URL:https://dashscope.aliyuncs.com/compatible-mode/v1}
+      chat:
+        options:
+          model: ${AI_MODEL:qwen-max}
+      # embedding 单独走 DashScope（DeepSeek 官方不提供 embedding 接口）。
+      # 若 AI_API_KEY 是 DeepSeek 的，请单独配置 AI_EMBEDDING_API_KEY 为 DashScope key，否则向量检索会失败。
+      embedding:
+        api-key: ${AI_EMBEDDING_API_KEY:${AI_API_KEY:}}
+        # 必须用「工作空间专属域名」：https://{WorkspaceId}.cn-beijing.maas.aliyuncs.com/compatible-mode/v1
+        # WorkspaceId 在百炼控制台 → 工作空间 → 工作空间详情 查看；key 必须属于该工作空间，否则 404。
+        # 通用域名 dashscope.aliyuncs.com 对工作空间 key 会返回 404，不要用。
+        # ⚠️ 必须是 /compatible-mode/v1（OpenAI 兼容模式），不能是 /api/v1（原生路径 Spring AI 拼出来会 404）
+        base-url: ${AI_EMBEDDING_BASE_URL:https://llm-we0hmfhb30y5op17.cn-beijing.maas.aliyuncs.com/compatible-mode/v1}
+        options:
+          model: ${AI_EMBEDDING_MODEL:text-embedding-v4}
+          dimensions: ${AI_EMBEDDING_DIM:1024}
+    vectorstore:
+      milvus:
+        client:
+          host: ${MILVUS_HOST:8.136.21.168}
+          port: ${MILVUS_PORT:19530}
+          username: ${MILVUS_USERNAME:root}
+          password: ${MILVUS_PASSWORD:milvus}
+        collection-name: ${MILVUS_COLLECTION:supportpilot_kb}
+        embedding-dimension: ${AI_EMBEDDING_DIM:1024}
+        index-type: HNSW
+        metric-type: COSINE
+        # 启动时自动建集合；mock 模式下 Milvus 不可达可临时设为 false 以跳过建连
+        initialize-schema: ${MILVUS_INIT_SCHEMA:true}
+  jackson:
+    default-property-inclusion: non_null
+  # V2.1 M4：附件单文件上限 10MB（请求体预留少量表单开销）
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 12MB
+  # V2.0 EP3：邮件通道。凭据仅走环境变量，不入库不入日志；MAIL_HOST 为空时自动降级为仅站内信。
+  mail:
+    host: ${MAIL_HOST:}
+    port: ${MAIL_PORT:465}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    protocol: ${MAIL_PROTOCOL:smtp}
+    default-encoding: UTF-8
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          ssl:
+            enable: ${MAIL_SMTP_SSL:true}
+          starttls:
+            enable: ${MAIL_SMTP_STARTTLS:false}
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
+
+app:
+  ai:
+    # 强制关闭 mock：无论什么环境、无论是否设置 AI_MOCK_ENABLED 环境变量，都走真实模型与真实 RAG。
+    # 如需临时演示，请改回 true 后重启；生产请勿开启。
+    mock-enabled: false
+    # AI 成本估算单价（元 / 千 tokens），用于看板 AI 成本统计；按实际计费调整。
+    cost-per-1k-tokens: ${AI_COST_PER_1K:0.008}
+  # SLA 计时：按优先级配置响应时限（小时），基于工单创建时间实时计算剩余 / 消耗百分比 / 颜色
+  sla:
+    p1-hours: ${SLA_P1_HOURS:4}
+    p2-hours: ${SLA_P2_HOURS:8}
+    p3-hours: ${SLA_P3_HOURS:24}
+    p4-hours: ${SLA_P4_HOURS:48}
+    # 全局回落的首响时限（分钟），仅在策略矩阵未配置时使用
+    frt-p1-minutes: ${SLA_FRT_P1_MINUTES:30}
+    frt-p2-minutes: ${SLA_FRT_P2_MINUTES:60}
+    frt-p3-minutes: ${SLA_FRT_P3_MINUTES:240}
+    frt-p4-minutes: ${SLA_FRT_P4_MINUTES:480}
+    # 扫描任务（V2.1 M2）：默认每 5 分钟一次
+    scan:
+      cron: ${SLA_SCAN_CRON:0 */5 * * * ?}
+    # 违约后自动升级：违约满 N 分钟自动置为「已升级」
+    auto-escalate:
+      enabled: ${SLA_AUTO_ESCALATE_ENABLED:true}
+      delay-minutes: ${SLA_AUTO_ESCALATE_DELAY_MINUTES:30}
+  # 附件存储（V2.1 M4）
+  attachment:
+    dir: ${ATTACHMENT_DIR:./data/attachments}
+    # 总容量配额（字节），默认 5GB；超过 70% 每日告警
+    quota-bytes: ${ATTACHMENT_QUOTA_BYTES:5368709120}
+  tenant:
+    default-id: ${DEFAULT_TENANT_ID:1}
+    jwt-secret: ${JWT_SECRET:supportpilot-dev-secret-change-me}
+  # V2.0 EP3：通知中心。email 通道收件人按「登录名@mail-domain」推导（企业邮箱惯例）；
+  # SMTP 未配置（MAIL_HOST 为空）时邮件任务直接标记失败，站内信照常产生。
+  notify:
+    mail-from: ${MAIL_FROM:no-reply@supportpilot.local}
+    mail-domain: ${MAIL_DOMAIN:supportpilot.local}
+  # RBAC 降级开关（PRD 13.1 回滚方案）：关闭后角色校验与数据范围过滤均放行，等效旧鉴权
+  rbac:
+    enabled: ${RBAC_ENABLED:true}
+  # 用户鉴权：纯 JWT 无状态，不依赖 Redis
+  security:
+    jwt-secret: ${JWT_SECRET:supportpilot-dev-secret-change-me}
+    token-expire-minutes: ${TOKEN_EXPIRE_MINUTES:30}
+    # 无需登录即可访问的接口（逗号分隔，ANT 风格）。/api/auth/login 必须放行；
+    # /actuator/** 放行使部署健康检查无需 token。
+    permit-all: ${SECURITY_PERMIT_ALL:/api/auth/login,/api/auth/register,/actuator/**}
+  # GitHub Issue 定时同步：拉取指定仓库的 issue 入库（去重），作为工单的真实数据来源
+  github:
+    enabled: ${GITHUB_SYNC_ENABLED:true}
+    owner: ${GITHUB_OWNER:spring-projects}
+    repo: ${GITHUB_REPO:spring-boot}
+    # 留空走匿名访问（60 次/小时）；配置后 5000 次/小时。建议通过环境变量注入，勿提交真实 token
+    token: ${GITHUB_TOKEN:}
+    # cron 表达式，默认每小时整点同步一次
+    sync-cron: ${GITHUB_SYNC_CRON:0 0 * * * ?}
+    # 单次最多拉取的 issue 数与单条 issue 最多拉取的评论数
+    max-issues: ${GITHUB_MAX_ISSUES:20}
+    max-comments: ${GITHUB_MAX_COMMENTS:20}
+    # 新拉取工单归属的默认租户 / 产品
+    default-tenant-id: ${GITHUB_DEFAULT_TENANT_ID:1}
+    default-product-id: ${GITHUB_DEFAULT_PRODUCT_ID:1}
+    # label → 租户/产品/优先级 映射：形如 "label名=值"，逗号分隔多个；命中第一个即用，未命中走默认
+    # 示例（环境变量里配）：
+    #   GITHUB_LABEL_TENANT_MAP=for:external=2,for:spring-team=1
+    #   GITHUB_LABEL_PRODUCT_MAP=type:bug=1,type:documentation=2
+    #   GITHUB_LABEL_PRIORITY_MAP=priority:critical=P1,priority:high=P2
+    label-tenant-map: ${GITHUB_LABEL_TENANT_MAP:}
+    label-product-map: ${GITHUB_LABEL_PRODUCT_MAP:}
+    label-priority-map: ${GITHUB_LABEL_PRIORITY_MAP:}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: support-pilot
+
+logging:
+  level:
+    com.supportpilot: INFO
+    org.springframework.ai: WARN
+    # 打印 SQL 语句（已配合 jpa.properties.hibernate.format_sql 格式化）
+    org.hibernate.SQL: DEBUG
+    # 打印 ? 占位符对应的实际绑定参数值（Hibernate 6 用此 logger）
+    org.hibernate.orm.jdbc.bind: TRACE
