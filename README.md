@@ -1,58 +1,57 @@
 # SupportPilot 智能工单系统
 
-面向技术支持团队的 AI 工单处理系统：工单列表 / 详情、AI Copilot 流式生成回复草稿、知识库管理、运营看板。前后端分离，可一键 Docker 部署到服务器。
+面向技术支持团队的 AI 工单处理系统。工单管理、GitHub Issue 双向同步与自动归户、AI Copilot 流式生成回复草稿、客户/联系人管理、SLA 策略与自动升级、邮件+站内信双通道通知、知识库 RAG 检索。前后端分离，一键 Docker 部署。
 
-![架构](https://img.shields.io/badge/arch-Frontend%20%2B%20Backend%20%2B%20PostgreSQL-blue) ![Java](https://img.shields.io/badge/Java-21-orange) ![React](https://img.shields.io/badge/React-18-61dafb)
-
----
-
-## 目录
-
-- [架构总览](#架构总览)
-- [目录结构](#目录结构)
-- [技术栈](#技术栈)
-- [快速开始](#快速开始)
-  - [方式一：Mock 演示（零依赖，本机立即体验）](#方式一mock-演示零依赖本机立即体验)
-  - [方式二：本地运行真实后端（需 JDK 21 + PostgreSQL）](#方式二本地运行真实后端需-jdk-21--postgresql)
-  - [方式三：Docker 一键部署（推荐服务器部署）](#方式三docker-一键部署推荐服务器部署)
-- [服务器部署步骤](#服务器部署步骤)
-- [环境变量](#环境变量)
-- [前端构建与 Nginx 部署](#前端构建与-nginx-部署)
-- [后端构建](#后端构建)
-- [接入真实大模型](#接入真实大模型)
-- [API 契约](#api-契约)
-- [后续迭代路线](#后续迭代路线)
+![架构](https://img.shields.io/badge/arch-Frontend%20%2B%20Backend%20%2B%20MySQL%20%2B%20Milvus-blue) ![Java](https://img.shields.io/badge/Java-21-orange) ![React](https://img.shields.io/badge/React-18-61dafb) ![MySQL](https://img.shields.io/badge/MySQL-8.4-00758f)
 
 ---
 
 ## 架构总览
 
 ```
-┌──────────────────────────────────────────────────────────┐
-│                      浏览器 / Nginx :80                    │
-│   前端 React (dist 静态资源)   │   /api 反代                │
-└───────────────┬───────────────────────┬──────────────────┘
-                │                       │
-                ▼                       ▼
-        ┌───────────────┐      ┌─────────────────┐
-        │  React 前端    │      │ Spring Boot :8080│
-        │  (Vite 构建)   │◄────►│  Controller/Service│
-        └───────────────┘      └────────┬─────────┘
-                                        │ JPA
-                                        ▼
-                              ┌────────────────────┐
-                              │ PostgreSQL + pgvector│
-                              │ (11 业务表 + 向量表)  │
-                              └────────────────────┘
-                                        │
-                          ┌─────────────┴─────────────┐
-                          ▼                           ▼
-                  AI Mock 场景（默认）          真实大模型 + RAG
-                  （无需 Key 开箱即用）        （AI_MOCK_ENABLED=false）
+                        ┌──────────────────────┐
+                        │  浏览器 / Nginx :80    │
+                        │  前端静态资源          │
+                        │  /api 反代 → backend   │
+                        └──────────┬───────────┘
+                                   │
+                        ┌──────────▼───────────┐
+                        │  Spring Boot :8080    │
+                        │  JWT · 多租户 · RBAC   │
+                        │  SSE · Scheduler       │
+                        └──┬───────┬───────┬───┘
+                           │       │       │
+              JPA / MySQL 8    Milvus     SMTP 邮件
+              （本地容器）     （远程）     （QQ/企业邮）
 ```
 
-- **前端** 与 **mock-server / 后端** 共用同一套 API 契约，前端零改动即可在 mock 与真实后端之间切换。
-- AI 默认走 **mock 演示场景**（与原型 1:1），保证无模型 Key、无向量库时全流程可跑；配置后切换真实大模型。
+**数据库（MySQL 8.4 容器内）**：20+ 业务表，由 `schema-mysql.sql` 启动时幂等建表；演示种子数据可选。
+
+**向量库（远程 Milvus）**：知识库文档分块后向量化，按语义相似度检索。向量化默认使用阿里云百炼 `text-embedding-v4`，余弦相似度检索。
+
+**大模型**：对话用 DeepSeek（`deepseek-flash`），支持 SSE 流式输出；接入任何 OpenAI 兼容网关只需改 `AI_BASE_URL` 和 `AI_MODEL`。
+
+**鉴权**：JWT 签名，30 分钟无任何请求自动退出；有操作会滑动续期（响应头 `X-Refreshed-Token`）。公网部署默认关闭自助注册。
+
+**通知**：所有事件（分派、转派、SLA 预警/超时、回复客户）支持站内信 + 邮件双通道，后台定时任务 20 秒轮询发送，失败按 1/5/15 分钟退避重试。
+
+**GitHub 同步**：可开关，定时全量拉取最近 N 条 issue，过滤 PR，按作者自动创建客户/联系人并归户，未解决工单自动按持单量均分分派。
+
+---
+
+## 功能一览
+
+| 模块 | 功能 |
+|------|------|
+| 工单管理 | 列表/详情/导入/批量更新/回复客户/内部备注/附件上传/批量归户/手动分派 |
+| GitHub 同步 | 拉取 Issue + 评论、按作者自动归户、自动派单、增量更新、手动触发 |
+| AI Copilot | 流式思考步骤 + RAG 引用 + 草稿打字输出、采纳/驳回、引用溯源 |
+| SLA | 策略矩阵（服务等级 × 优先级）、工作日历/节假日、暂停累计、自动预警/升级 |
+| 客户管理 | 客户档案、联系人、归户匹配、GitHub 作者自动建户 |
+| 知识库 | 文档上传 → 分片 → 向量化入库、按工单语义自动召回、重建索引 |
+| 通知 | 规则引擎（事件 × 接收人 × 通道）、失败任务重试、人工重发 |
+| 用户/权限 | 登录、角色（ENGINEER / MANAGER / KB_ADMIN / ADMIN）、租户隔离、自助改密/邮箱 |
+| 看板 | 工单状态分布、优先级分布、SLA 达成率、FRT/MTTR |
 
 ---
 
@@ -60,42 +59,33 @@
 
 ```
 support-pilot/
-├── docker-compose.yml          # 全栈一键编排（postgres + backend + frontend/nginx）
-├── .env.example                # 环境变量模板
+├── docker-compose.yml        # 全栈编排（mysql + backend + frontend/nginx）
+├── .env.example              # 环境变量模板（生产用 .env，已被 gitignore）
 ├── README.md
-├── frontend/                   # React 18 + TS + Vite 前端
-│   ├── src/
-│   │   ├── api/client.ts       # API 客户端 + SSE 订阅
-│   │   ├── components/         # AIPanel（流式 AI 面板）、Toast
-│   │   ├── layouts/Shell.tsx   # 整体布局
-│   │   ├── pages/              # TicketList / TicketDetail / Board / KnowledgeBase
-│   │   └── styles/global.css   # 原型样式 1:1 移植
-│   ├── Dockerfile              # 多阶段：node 构建 → nginx 运行
-│   ├── nginx.conf              # 静态托管 + SPA 回退 + /api 反代 + SSE 配置
-│   └── vite.config.ts          # dev 代理 /api → VITE_API_TARGET
-├── backend/                    # Spring Boot 3.3 后端
+├── frontend/                 # React 18 + TS + Vite + Ant Design
+│   ├── src/api/              # client.ts（API + SSE + 自动 token 续期）
+│   ├── src/pages/            # TicketList / TicketDetail / Board / KnowledgeBase /
+│   │                         # CustomerManagement / UserManagement / NotifyRules /
+│   │                         # SlaSettings / GitHubSync / Profile
+│   ├── Dockerfile            # 多阶段：node 构建 → nginx 运行
+│   └── nginx.conf            # SPA 回退 + /api 反代 + SSE 超时
+├── backend/                  # Spring Boot 3.x + Java 21
 │   ├── pom.xml
 │   ├── Dockerfile
-│   ├── docker-compose.yml      # 仅后端 + postgres（本地后端开发用）
 │   └── src/main/
 │       ├── java/com/supportpilot/
-│       │   ├── SupportPilotApplication.java
-│       │   ├── common/         # Result / 异常 / 多租户 / JWT / 过滤器
-│       │   ├── config/         # CORS
-│       │   ├── entity/         # 11 个 JPA 实体
-│       │   ├── repository/     # 11 个 Repository
-│       │   ├── dto/            # 与前端对齐的 VO
-│       │   ├── service/        # Ticket / Agent(SSE) / Draft / Kb / Metrics
-│       │   ├── controller/     # 5 个 Controller
-│       │   └── rag/            # RAG 接口 + Mock/Real 实现
+│       │   ├── entity/       # 20+ JPA 实体
+│       │   ├── repository/   # Spring Data JPA
+│       │   ├── service/      # Ticket / GitHubSync / Mail / Sla / Agent / ...
+│       │   ├── controller/
+│       │   ├── rag/          # Milvus 向量检索
+│       │   └── config/       # AuthFilter / JwtUtil / CORS / Scheduler
 │       └── resources/
-│           ├── application.yml / application-prod.yml
-│           ├── db/schema.sql   # 建表（pgvector 扩展 + 11 表 + 向量表）
-│           ├── db/data.sql     # 演示种子数据
-│           └── prompts/triage.txt
-└── mock-server/                # 轻量 Node mock 后端（本机无 Java 时联调用）
-    ├── server.js
-    └── data.js
+│           ├── application.yml
+│           └── db/
+│               ├── schema-mysql.sql    # 幂等建表
+│               └── data-mysql.sql      # 可选演示种子
+└── docs/
 ```
 
 ---
@@ -104,95 +94,97 @@ support-pilot/
 
 | 层 | 技术 |
 |----|------|
-| 前端 | React 18 + TypeScript + Vite 4 + react-router-dom 6（不引 UI 库，原型样式 1:1 移植） |
-| 后端 | Spring Boot 3.3.5 + Java 21 + Spring Data JPA + Spring AI 1.0.0 + SseEmitter（虚拟线程） |
-| 数据库 | PostgreSQL 16 + pgvector |
-| 鉴权 | jjwt 0.12.6（轻量多租户解析，完整鉴权留待 S3） |
+| 前端 | React 18 + TypeScript + Vite 4 + Ant Design 5 + react-router-dom 6 |
+| 后端 | Spring Boot 3.x + Java 21（虚拟线程）+ Spring Data JPA + Spring AI + SseEmitter |
+| 关系库 | MySQL 8.4 |
+| 向量库 | Milvus（远程部署） |
+| 向量化 | 阿里云百炼 `text-embedding-v4`（支持任何 OpenAI 兼容接口） |
+| 大模型 | DeepSeek / 任何 OpenAI 兼容网关 |
+| 鉴权 | jjwt 0.12.6，30 分钟滑动过期 |
+| 邮件 | SMTP（QQ / 腾讯企业邮 / Outlook），465 隐式 SSL 或 587 STARTTLS |
 | 部署 | Docker Compose + Nginx 反代 |
 
 ---
 
 ## 快速开始
 
-### 方式一：Mock 演示（零依赖，本机立即体验）
-
-无需 Java / PostgreSQL，前端通过 Vite 代理访问 mock-server。
+### 方式一：Docker 一键部署（推荐生产）
 
 ```bash
-# 1. 启动 mock 后端（端口 3001）
-cd mock-server
-npm install
-npm start        # node server.js
-
-# 2. 启动前端 dev server（端口 5173）
-cd ../frontend
-npm install
-npm run dev
+cp .env.example .env          # 把 changeme 全部换成真实值
+docker compose up -d --build
+docker compose logs -f backend
 ```
 
-浏览器打开 http://localhost:5173 ，体验 4 个页面与 AI 流式生成全流程。
+首次启动会自动建库建表（`CREATE TABLE IF NOT EXISTS`，幂等可重复执行），并可选灌入演示种子数据。
 
-> npm 缓存若因中文路径报错，可指定纯 ASCII 缓存目录：
-> `npm install --cache "D:\npm-cache-sp"`
+- 前端：http://\<服务器IP\>/
+- 默认管理员：`admin / 123456`（**登录后立即改密码**）
+- 后端不对外暴露 8080，仅由 Nginx 反代；MySQL 3306 同理
 
-### 方式二：本地运行真实后端（需 JDK 21 + PostgreSQL）
+### 方式二：本地开发（JDK 21 + MySQL 8）
 
-1. 准备 PostgreSQL 16 并安装 pgvector 扩展（或用 `backend/docker-compose.yml` 起一个带 pgvector 的容器）：
+1. **起数据库**（也可以用 Docker 快速起一个）：
+   ```bash
+   docker run --name mysql-sp -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=supportpilot \
+     -p 3306:3306 -d mysql:8.4 --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+   ```
+2. **起后端**：
    ```bash
    cd backend
-   docker compose up -d postgres   # 仅启动数据库
+   mvn spring-boot:run    # 自动建表 + 可选种子
    ```
-2. 启动后端（默认 AI mock，自动建表 + 灌种子数据）：
-   ```bash
-   cd backend
-   mvn clean spring-boot:run
-   ```
-3. 前端切到真实后端：
+3. **起前端**（默认通过 Vite 代理到 3001 mock；要连真实后端设置 `VITE_API_TARGET`）：
    ```bash
    cd frontend
+   npm install
    $env:VITE_API_TARGET="http://localhost:8080"   # PowerShell
    npm run dev
    ```
 
-### 方式三：Docker 一键部署（推荐服务器部署）
+### 方式三：Mock 演示（零依赖体验）
 
+前端 + mock-server（端口 3001），无需 Java / MySQL / 大模型。
 ```bash
-cd support-pilot
-cp .env.example .env     # 按需修改
-docker compose up -d --build
+cd mock-server && npm install && npm start
+cd ../frontend && npm install && npm run dev
 ```
-
-启动后：
-- 前端：http://\<host\>/
-- 后端健康检查：http://\<host\>:8080/actuator/health
-
-查看日志：`docker compose logs -f backend`
 
 ---
 
-## 服务器部署步骤
+## 服务器部署清单
 
-以 Linux 服务器为例：
+1. **Docker + Compose v2**：`docker compose version` 能输出版本即可
+2. **开放端口**：只需要 **80**（HTTP）；3306、8080、19530 都不需要放行
+3. **能访问 Milvus**：在服务器上执行 `nc -vz 8.136.21.168 19530` 验证；连不上可以临时设 `MILVUS_INIT_SCHEMA=false` 启动（知识库功能不可用）
+4. **HTTPS（可选）**：在服务器外层 Nginx / 网关把 80 映射到域名并配证书；`frontend/nginx.conf` 已内置 SPA 回退、SSE 长连接超时、gzip
 
-1. **安装 Docker 与 Docker Compose**（略）。
-2. **上传工程**到服务器，例如 `/opt/support-pilot`。
-3. **配置环境变量**：
-   ```bash
-   cd /opt/support-pilot
-   cp .env.example .env
-   vim .env   # 至少修改 DB_PASSWORD、JWT_SECRET；接入真实模型时填 AI_API_KEY
-   ```
-4. **构建并启动**：
-   ```bash
-   docker compose up -d --build
-   ```
-5. **配置反向代理 / HTTPS**（可选）：在服务器外层 Nginx / 网关把 80 端口映射到域名，并配置 SSL 证书。`frontend/nginx.conf` 已内置 SPA 回退与 `/api` 反代，外层只需透传。
-6. **验证**：
-   - 访问前端页面，确认工单列表 7 条数据渲染正常。
-   - 进入工单详情 → 「交给 AI 处理」，确认 SSE 流式步骤 / 草稿打字 / 引用正常。
-   - 点击「采纳并回复客户」，确认工单变「已解决」、绿色 toast 弹出、刷新后状态保持。
+### 上传部署包（Windows → Linux）
 
-数据持久化：PostgreSQL 数据存在 Docker 命名卷 `pgdata`，`docker compose down` 不会删除；彻底清理用 `docker compose down -v`。
+```cmd
+tar -czf supportpilot-deploy.tar.gz --exclude=node_modules --exclude=target --exclude=dist --exclude=.git docker-compose.yml .env backend frontend
+scp supportpilot-deploy.tar.gz admin@<服务器IP>:~/
+```
+
+```bash
+mkdir -p ~/supportpilot
+tar -xzf ~/supportpilot-deploy.tar.gz -C ~/supportpilot
+cd ~/supportpilot
+chmod 600 .env
+docker compose up -d --build
+docker compose logs -f backend
+```
+
+### 常用运维
+
+| 操作 | 命令 |
+|------|------|
+| 看后端日志 | `docker compose logs -f backend` |
+| 重启（改 .env 后） | `docker compose restart backend` |
+| 停止（数据保留） | `docker compose down` |
+| 彻底清理 | `docker compose down -v` |
+| 导出 DB 备份 | `docker exec supportpilot-mysql mysqldump -uroot -p"$DB_ROOT_PASSWORD" supportpilot > backup.sql` |
+| 手动触发 GitHub 同步 | `curl http://localhost:8080/api/github-sync/run -X POST` |
 
 ---
 
@@ -200,87 +192,95 @@ docker compose up -d --build
 
 完整列表见 [.env.example](.env.example)。关键项：
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `DB_HOST` / `DB_PORT` / `DB_NAME` / `DB_USER` / `DB_PASSWORD` | localhost:5432/supportpilot/postgres/postgres | 数据库连接 |
-| `SERVER_PORT` | 8080 | 后端端口 |
+### 数据库
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `DB_HOST` / `DB_PORT` | mysql / 3306 | 容器编排里填 `mysql`（服务名） |
+| `DB_NAME` / `DB_USER` | supportpilot / supportpilot | 应用账号 |
+| `DB_PASSWORD` | — | **必须改**，首次初始化后不要再动 |
+| `DB_ROOT_PASSWORD` | — | root 密码，用于备份/运维 |
+| `SQL_INIT_DATA_LOCATIONS` | classpath:db/data-mysql.sql | 留空字符串 = 不导入演示数据 |
+
+### 鉴权
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `JWT_SECRET` | — | **必须改**为 64 位随机串，否则 token 可伪造 |
+| `TOKEN_EXPIRE_MINUTES` | 30 | 无操作自动退出，有操作滑动续期 |
 | `DEFAULT_TENANT_ID` | 1 | 无 JWT 时的默认租户 |
-| `JWT_SECRET` | supportpilot-dev-secret-change-me | JWT 签名密钥，**生产务必修改** |
-| `AI_MOCK_ENABLED` | true | true=演示场景；false=真实大模型 |
-| `AI_API_KEY` | （空） | OpenAI 兼容接口 Key |
-| `AI_BASE_URL` | https://dashscope.aliyuncs.com/compatible-mode/v1 | 模型网关地址 |
-| `AI_MODEL` | qwen-max | 模型名 |
-| `VITE_API_TARGET` | http://localhost:3001 | 仅前端 dev 代理用 |
+| `SECURITY_PERMIT_ALL` | /api/auth/login,/actuator/** | 公网部署不要包含 /api/auth/register |
+
+### 大模型
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `AI_API_KEY` | — | 对话模型 API Key |
+| `AI_BASE_URL` | https://api.deepseek.com | 任何 OpenAI 兼容网关 |
+| `AI_MODEL` | deepseek-flash | 对话模型名 |
+| `AI_EMBEDDING_API_KEY` / `BASE_URL` / `MODEL` | — | 向量化模型（可与对话用同一套） |
+
+### 向量库
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `MILVUS_HOST` / `PORT` | 8.136.21.168 / 19530 | 远程 Milvus 地址 |
+| `MILVUS_INIT_SCHEMA` | true | 首次启动时自动建 collection + index |
+
+### 邮件（可选，不配则降级为仅站内信）
+| 变量 | 示例 | 说明 |
+|------|------|------|
+| `MAIL_HOST` / `PORT` | smtp.qq.com / 465 | QQ 465 SSL；Outlook 用 587 STARTTLS |
+| `MAIL_USERNAME` / `MAIL_PASSWORD` | 你的邮箱 / 授权码 | **授权码不是登录密码** |
+| `MAIL_SMTP_SSL` / `MAIL_SMTP_STARTTLS` | true / false | 与端口匹配 |
+| `MAIL_FROM` | 你的邮箱 | 一般要与用户名一致 |
+| `MAIL_DOMAIN` | qq.com | 用户无邮箱字段时回退「登录名@域名」 |
+
+### GitHub 同步（可选）
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `GITHUB_SYNC_ENABLED` | false | 打开前先配 Owner/Repo/Token |
+| `GITHUB_OWNER` / `REPO` | — | 仓库 |
+| `GITHUB_TOKEN` | — | Personal Access Token，至少需要 repo 读取权限 |
+| `GITHUB_MAX_ISSUES` | 20 | 单次拉取上限，最多 100 |
+
+### SLA
+| 变量 | 默认 | 说明 |
+|------|------|------|
+| `SLA_SCAN_CRON` | 0 */5 * * * ? | 每 5 分钟扫描 |
+| `SLA_AUTO_ESCALATE_ENABLED` | true | 超时违约满 N 分钟自动升级 |
+| `SLA_AUTO_ESCALATE_DELAY_MINUTES` | 30 | 违约多久后升级 |
 
 ---
 
-## 前端构建与 Nginx 部署
+## API 概览
 
-```bash
-cd frontend
-npm install
-npm run build       # 产出 dist/（tsc 类型检查 + vite 构建）
-```
+统一返回体 `{ "code": 0, "message": "success", "data": ... }`，`code != 0` 表示失败。
 
-将 `dist/` 上传到服务器，用 `frontend/nginx.conf` 作为 Nginx 站点配置：
-- 静态资源根目录指向 `dist/`
-- `try_files $uri $uri/ /index.html` 处理 SPA 路由
-- `location /api/` 反代到后端 `http://backend:8080`，并关闭缓冲以支持 SSE
-
-> 若部署在子路径（如 https://domain/support/），构建时设置 `VITE_BASE=/support/`，并在 Nginx 调整 `try_files`。
-
----
-
-## 后端构建
-
-```bash
-cd backend
-mvn clean package -DskipTests     # 产出 target/support-pilot-backend.jar
-```
-
-运行：
-```bash
-java -jar target/support-pilot-backend.jar                      # 默认 profile
-java -jar -Dspring.profiles.active=prod target/support-pilot-backend.jar   # 生产（不自动建表 / 灌数据）
-```
-
-生产环境建议关闭 `spring.sql.init`（`application-prod.yml` 已设 `mode: never`），改用 Flyway/Liquibase 管理表结构迁移。
-
----
-
-## 接入真实大模型
-
-1. 在 `.env` 中设置：
-   ```
-   AI_MOCK_ENABLED=false
-   AI_API_KEY=sk-xxxx
-   AI_BASE_URL=https://dashscope.aliyuncs.com/compatible-mode/v1   # 或你的 OpenAI 兼容网关
-   AI_MODEL=qwen-max
-   ```
-2. `docker compose up -d --build backend` 重启后端。
-3. Agent 会尝试调用真实模型；若调用失败（Key 无效 / 网络不通），自动回退到演示场景，保证页面可用。
-
-向量检索（RAG）当前为骨架（`RealRagService`），S2 将接入 Spring AI pgvector `VectorStore`，对 `kb_chunk` 表做相似度检索。
-
----
-
-## API 契约
-
-统一返回体：`{ "code": 0, "message": "success", "data": ... }`，`code != 0` 表示失败。
-
+### 认证
 | 方法 | 路径 | 说明 |
 |------|------|------|
-| GET | `/api/tickets?status=&priority=&keyword=&page=&size=` | 工单分页列表 |
-| GET | `/api/tickets/{id}` | 工单详情（含会话消息） |
-| POST | `/api/tickets` | 新建工单 |
+| POST | `/api/auth/login` | 用户名密码登录，返回 JWT |
+| POST | `/api/auth/register` | 自助注册（公网部署默认关闭） |
+
+### 工单
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/tickets` | 分页列表，支持 status/priority/customerId/keyword 过滤 |
+| GET | `/api/tickets/{id}` | 详情（含会话消息、联系人、SLA 快照） |
+| POST | `/api/tickets` | 新建 |
 | POST | `/api/tickets/import` | 批量导入（幂等） |
-| GET | `/api/kb/documents` | 知识库文档列表 |
-| POST | `/api/kb/reindex` | 触发重建索引 |
-| POST | `/api/kb/search` | 知识库检索 |
-| GET | `/api/metrics/overview` | 看板指标 |
-| GET | `/api/agent/runs?ticketId=` | **SSE 流**：thinking/step/draft/cites/done |
-| POST | `/api/drafts/{id}/approve` | 采纳草稿 → 工单状态变「已解决」 |
-| POST | `/api/drafts/{id}/reject` | 驳回草稿 |
+| POST | `/api/tickets/{id}/assign` | 分派/转派 |
+| POST | `/api/tickets/{id}/status` | 状态变更 |
+| POST | `/api/tickets/{id}/message` | 回复（`internal=true` 为内部备注；非内部会触发客户邮件） |
+
+### GitHub 同步
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| POST | `/api/github-sync/run` | 立即触发一次同步 |
+| GET | `/api/github-sync/config` | 查看/修改同步配置 |
+| GET | `/api/github-sync/status` | 最近同步结果 |
+
+### SSE（AI Copilot）
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/agent/runs?ticketId=` | **SSE 流**：thinking / step / draft / cites / done |
 
 SSE 事件载荷：
 - `thinking`：`{ "label": "..." }`
@@ -289,11 +289,36 @@ SSE 事件载荷：
 - `cites`：`{ "items": [...] }`
 - `done`：`{ "ticketId" }`
 
+### 其他
+| 方法 | 路径 | 说明 |
+|------|------|------|
+| GET | `/api/metrics/overview` | 看板指标 |
+| GET | `/api/sla/policies` | SLA 策略矩阵 |
+| GET | `/api/customers` | 客户列表 |
+| GET | `/api/users` | 用户管理（MANAGER 以上） |
+| GET | `/api/notify-rules` | 通知规则 |
+
+响应头 `X-Refreshed-Token`：token 过期前 1/3 生命周期内的请求会刷新 token，前端自动存储。
+
 ---
 
-## 后续迭代路线
+## 部署后检查清单
 
-- **S1（已完成）**：前后端分离工程、4 页面、AI 流式演示、Docker 部署。
-- **S2**：接入真实 RAG（pgvector 向量检索）、文档分片入库、引用可溯源。
-- **S3**：完整鉴权（登录 / 签发 JWT / RBAC）、多租户数据强隔离、审计日志。
-- **S4**：评测闭环（采纳 / 驳回回流为评测样本）、A/B 看板、成本归因。
+- [ ] 用 `admin / 123456` 登录后立即改密码
+- [ ] 在「用户管理」给每个处理人填真实邮箱（否则 QQ 邮箱回退地址收不到）
+- [ ] 测试邮件：新建一条通知规则 → 分派一个工单 → 查收件箱
+- [ ] 验证 GitHub 同步：填好 Owner/Repo/Token 后在「GitHub 同步」页点「立即同步」
+- [ ] 验证 SLA：等 5 分钟看扫描日志，或手动改一个测试工单的 SLA 快照触发预警
+- [ ] `nc -vz 8.136.21.168 19530` 验证 Milvus 可达性
+- [ ] 生产环境把 JWT_SECRET、DB_PASSWORD、MAIL_PASSWORD 全部轮换一次
+
+---
+
+## 安全说明
+
+- **密钥隔离**：`.env`、`application-secret.yml`、`target/`、`node_modules/`、`.m2-repo/` 全部被 `.gitignore` 排除，不会进入 Git 仓库
+- **公网注册**：`SECURITY_PERMIT_ALL` 默认不含 `/api/auth/register`，公网部署任何人无法自助注册
+- **邮件授权码**：SMTP 密码用的是邮箱厂商授权码，而非登录密码，泄露范围可控
+- **数据库端口**：编排内 MySQL 不对外暴露，仅后端容器能连
+- **JWT**：30 分钟滑动过期 + 每次签发新密钥会自动让旧 token 失效（单密钥轮换场景）
+- **建议**：服务器只开放 80 端口 + 密钥登录；生产环境启用 HTTPS
